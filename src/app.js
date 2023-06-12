@@ -18,9 +18,9 @@ app.get('/productos', async (req, res) => {
     }
 });
 
-app.get('/productos/:id', async (req, res) => {
-    const id = Number(req.params.id);
-    const producto = await productManager.getProductById(id);
+app.get('/productos/:pid', async (req, res) => {
+    const pid = Number(req.params.pid);
+    const producto = await productManager.getProductById(pid);
     if (producto != undefined) {
         res.json(producto);
     } else {

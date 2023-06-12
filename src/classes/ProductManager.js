@@ -19,16 +19,14 @@ export default class ProductManager {
     getProducts = async () => {
         let productsString = await fs.promises.readFile(this.path, "utf-8");
         let productsObj = JSON.parse(productsString);
-        return await productsObj;
+        return productsObj;
     }
 
     getProductById = async (id) => {
         let productsStr = await fs.promises.readFile(this.path, "utf-8");
-        let productsObj = await JSON.parse(productsStr);
-        console.log(productsObj);
-        let product = await productsObj.find((p) => p.id === id);
-        console.log(product);
-        return await product;
+        let productsObj = JSON.parse(productsStr);
+        let product = productsObj.find((p) => p.id === id);
+        return product;
     }
 
     updateProduct = async(id, producto) => {
