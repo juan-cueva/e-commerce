@@ -1,0 +1,92 @@
+[
+	{
+		"title": "Google Chromecast Hd",
+		"description": "Con los beneficios del Chromecast, las pantallas se convertirán en un mundo de contenidos para disfrutar. Este media player permite acceder a distintas plataformas multimedia. Se destaca también por actualizarse automáticamente para que interactúes con un mayor número de aplicaciones.",
+		"price": 200000,
+		"thumbnail": "Sin imagen",
+		"code": "strm-1",
+		"stock": 25,
+		"id": 1
+	},
+	{
+		"title": "Roku Express 3930",
+		"description": "Roku, marca pionera en la reproducción de streaming para TV, tiene como misión ser una plataforma que conecte todo el ecosistema televisivo del mundo. Para lograrlo fabrica dispositivos que son fáciles de configurar y usar y permiten el acceso a más de 100.000 películas y programas de TV.",
+		"price": 154500,
+		"thumbnail": "Sin imagen",
+		"code": "strm-2",
+		"stock": 30,
+		"id": 2
+	},
+	{
+		"title": "Amazon Fire TV Stick 4K",
+		"description": "Fire TV Stick de Amazon es uno de los dispositivos streaming más reconocidos a nivel mundial. Sus aplicaciones y poderoso funcionamiento lo vuelven una herramienta única para convertir cualquier pantalla compatible en un smart TV.",
+		"price": 193715,
+		"thumbnail": "Sin imagen",
+		"code": "strm-3",
+		"stock": 20,
+		"id": 3
+	},
+	{
+		"title": "Mini drone DJI DJI Mavic Mini 2",
+		"description": "Los drones DJI se caracterizan por la mejor tecnología al servicio de cada tipo de usuario y escenario de disparo. Si buscas un dron para principiantes, un dron profesional o solamente quieres estar actualizado con las últimas innovaciones, es hora de elegir a esta marca.",
+		"price": 3199999,
+		"thumbnail": "Sin imagen",
+		"code": "drn-1",
+		"stock": 3,
+		"id": 4
+	},
+	{
+		"title": "Mini drone DJI Mini 3 Pro RC",
+		"description": " Los drones DJI se caracterizan por la mejor tecnología al servicio de cada tipo de usuario y escenario de disparo. Si buscas un dron para principiantes, un dron profesional o solamente quieres estar actualizado con las últimas innovaciones, es hora de elegir a esta marca.",
+		"price": 5399999,
+		"thumbnail": "Sin imagen",
+		"code": "drn-2",
+		"stock": 1,
+		"id": 5
+	},
+	{
+		"title": "Parlante JBL Charge 5",
+		"description": "JBL Charge 5 ofrece un sonido natural, con una gran claridad y precisión, que se dispersa de manera uniforme. Un parlante que asegura potencia y calidad por igual en la reproducción de contenidos multimedia.",
+		"price": 664900,
+		"thumbnail": "Sin imagen",
+		"code": "aud-1",
+		"stock": 60,
+		"id": 6
+	},
+	{
+		"title": "Parlante Sony Extra Bass XB13",
+		"description": "Sony es reconocida a nivel mundial por desarrollar productos electrónicos con innovación y calidad. Su línea de audio combina tecnología y creatividad para que tengas el mejor sonido y las funciones específicas en cada ocasión.",
+		"price": 200000,
+		"thumbnail": "Sin imagen",
+		"code": "aud-2",
+		"stock": 20,
+		"id": 7
+	},
+	{
+		"title": "Televisor Hyundai 39 Pulgadas",
+		"description": "Con el Smart TV HYLED399AiM accederás a diferentes contenidos a través de las aplicaciones. Además, podrás navegar por Internet, interactuar en redes sociales y divertirte con videojuegos.",
+		"price": 1489900,
+		"thumbnail": "Sin imagen",
+		"code": "tv-1",
+		"stock": 10,
+		"id": 8
+	},
+	{
+		"title": "Smart TV Hyundai HYLED3248AiM",
+		"description": "Con el Smart TV HYLED3248AiM accederás a diferentes contenidos a través de las aplicaciones. Además, podrás navegar por Internet, interactuar en redes sociales y divertirte con videojuegos.",
+		"price": 759900,
+		"thumbnail": "Sin imagen",
+		"code": "tv-2",
+		"stock": 15,
+		"id": 9
+	},
+	{
+		"title": "Nintendo Switch OLED 64GB",
+		"description": "Con tu consola Switch tendrás entretenimiento asegurado todos los días. Su tecnología fue creada para poner nuevos retos tanto a jugadores principiantes como expertos.",
+		"price": 1814000,
+		"thumbnail": "Sin imagen",
+		"code": "cons-1",
+		"stock": 5,
+		"id": 10
+	}
+]
