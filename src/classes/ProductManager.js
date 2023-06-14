@@ -1,16 +1,14 @@
 import fs from "fs";
 
 export default class ProductManager {
-    id = 0;
-    product = {}
     constructor(path) {
         this.path = path;
         this.products = [];
     }
 
     addProduct = async (producto) => {
-        this.id++;
-        producto.id = this.id;
+        this.products = JSON.parse(await fs.promises.readFile(this.path, "utf-8"));
+        producto.id = this.products.length + 1;
         this.products.push(producto);
         await fs.promises.writeFile(this.path, JSON.stringify(this.products, null, '\t'), "utf-8")
         .then(console.log("Se guardó el producto"));
@@ -32,15 +30,17 @@ export default class ProductManager {
     updateProduct = async(id, producto) => {
         let index;
         this.products = JSON.parse(await fs.promises.readFile(this.path, "utf-8"));
-        index = this.products.findIndex((pid) => pid.id === id);
+        index = this.products.findIndex((p) => p.id === id);
         this.products[index] = {
-            id: id,
             title: producto.title,
             description: producto.description,
             price: producto.price,
-            thumbnail: producto.thumbnail,
+            thumbnails: producto.thumbnail,
             code: producto.code,
-            stock: producto.stock
+            stock: producto.stock,
+            status: producto.status,
+            category: producto.category,
+            id: id
         };
         await fs.promises.writeFile(this.path, JSON.stringify(this.products, null, '\t'))
     }
