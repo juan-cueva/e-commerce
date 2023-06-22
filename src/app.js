@@ -24,9 +24,9 @@ const httpServer = app.listen(8080, () => console.log('El servidor inició en el
 
 const io = new Server(httpServer);
 
-io.on('connection',socket => {
+io.on('connection', socket => {
     console.log('Cliente conectado');
-    socket.on('message', data =>{
-        console.log(data);
+    socket.on('eventos', data => {
+
     })
 })
