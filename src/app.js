@@ -1,5 +1,6 @@
 import express from 'express';
 import handlebars from 'express-handlebars'
+import mongoose from 'mongoose';
 
 import products from './routes/products.router.js';
 import carts from './routes/carts.router.js';
@@ -8,6 +9,8 @@ import __dirname from './utils.js';
 import { Server } from 'socket.io'
 
 const app = express();
+const connection = mongoose.connect('mongodb+srv://juancuevac:GZ5PZnbPrENkgvip@cluster0.6si3rcv.mongodb.net/?retryWrites=true&w=majority')
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
