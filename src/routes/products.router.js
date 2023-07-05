@@ -1,7 +1,7 @@
 import { Router } from "express";
-import ProductManager from "../dao/fileManagers/ProductManager.js";
+import ProductManager from "../dao/dbManagers/products.js";
 
-const productManager = new ProductManager('./src/files/Products.json');
+const productManager = new ProductManager();
 
 const router = Router();
 
@@ -16,10 +16,11 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/:pid', async (req, res) => {
-    const pid = Number(req.params.pid);
+    const pid = req.params.pid;
     const producto = await productManager.getProductById(pid);
     if (producto != undefined) {
         res.json(producto);
+
     } else {
         res.json({ error: 'Producto no encontrado' });
     }
@@ -29,7 +30,7 @@ router.post('/', async (req, res) => {
     const producto = req.body;
     try {
         await productManager.addProduct(producto)
-            .then(res.json({ status: 'success', message: 'Se creó el producto' }))
+            .then(res.json({ status: 'success', message: 'Se creó el producto' }));
     } catch (error) {
         res.json({ status: 'failed', message: 'Producto no pudó ser creado', error: error })
     }
@@ -37,21 +38,29 @@ router.post('/', async (req, res) => {
 });
 
 router.put('/:pid', async (req, res) => {
-    const pid = Number(req.params.pid);
+    const pid = req.params.pid;
     const producto = req.body;
     try {
-        await productManager.updateProduct(pid, producto)
-            .then(res.json({ status: 'success', message: 'Se actualizó el producto' }))
+        let result = await productManager.updateProduct(pid, producto);
+        if (result != undefined) {
+            res.json(res.json({ status: 'success', message: 'Se actualizó el producto' }));
+        } else {
+            res.json({ error: 'Producto no encontrado' });
+        }
     } catch (error) {
         res.json({ status: 'failed', message: 'Producto no pudó ser actualizado', error: error })
     }
 });
 
 router.delete('/:pid', async (req, res) => {
-    const pid = Number(req.params.pid);
+    const pid = req.params.pid;
     try {
-        await productManager.deleteProduct(pid)
-            .then(res.json({ status: 'success', message: 'Se eliminó el producto' }));
+        let result = await productManager.deleteProduct(pid);
+        if (result != undefined) {
+            res.json(res.json({ status: 'success', message: 'Se borró el producto' }));
+        } else {
+            res.json({ error: 'Producto no encontrado' });
+        }
     } catch (error) {
         res.json({ status: 'failed', message: 'Producto no pudó ser eliminado', error: error })
     }

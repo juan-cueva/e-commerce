@@ -15,9 +15,10 @@ router.post('/', async(req, res) => {
 });
 
 router.get('/:cid', async(req, res) => {
-    const cid = Number(req.params.cid);
+    const cid = String(req.params.cid);
     const products = await cartManager.getProductsInCart(cid);
-    if(products != undefined) {
+    console.log(products);
+    if(products != null) {
         res.json(products);
     } else {
         res.json({ error: 'Carrito no encontrado' });
@@ -25,13 +26,13 @@ router.get('/:cid', async(req, res) => {
 });
 
 router.post('/:cid/product/:pid', async(req, res) => {
-    const cid = Number(req.params.cid);
+    const cid = String(req.params.cid);
     const pid = Number(req.params.pid);
     try {
         await cartManager.addProductToCart(cid, pid)
         .then(res.json({ status: 'success', message: 'Se agregó el producto al carrito' }));
     } catch (error) {
-        res.json({ status: 'failed', message: 'El producto no pudó ser añadido al carrito', error: error });
+        res.status({ status: 'failed', message: 'El producto no pudó ser añadido al carrito', error: error});
     }
 });
 
