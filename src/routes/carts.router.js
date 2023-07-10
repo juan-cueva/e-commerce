@@ -17,7 +17,6 @@ router.post('/', async(req, res) => {
 router.get('/:cid', async(req, res) => {
     const cid = String(req.params.cid);
     const products = await cartManager.getProductsInCart(cid);
-    console.log(products);
     if(products != null) {
         res.json(products);
     } else {
@@ -26,8 +25,8 @@ router.get('/:cid', async(req, res) => {
 });
 
 router.post('/:cid/product/:pid', async(req, res) => {
-    const cid = String(req.params.cid);
-    const pid = Number(req.params.pid);
+    const cid = req.params.cid;
+    const pid = req.params.pid;
     try {
         await cartManager.addProductToCart(cid, pid)
         .then(res.json({ status: 'success', message: 'Se agregó el producto al carrito' }));
