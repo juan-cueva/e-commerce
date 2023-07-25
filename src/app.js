@@ -5,6 +5,8 @@ import mongoose from 'mongoose';
 import products from './routes/products.router.js';
 import carts from './routes/carts.router.js';
 import views from './routes/views.router.js';
+import MessagesManager from './dao/dbManagers/messages.js';
+
 import __dirname from './utils.js';
 import { Server } from 'socket.io'
 
@@ -27,9 +29,19 @@ const httpServer = app.listen(8080, () => console.log('El servidor inició en el
 
 const io = new Server(httpServer);
 
+const messages = [];
+const messagesManager = new MessagesManager();
+
 io.on('connection', socket => {
     console.log('Cliente conectado');
-    socket.on('eventos', data => {
-
+    socket.on('mensaje', data => {
+        console.log(data);
+        if (data.accion === 'guardarMensaje') {
+                let message = {
+                    user: data.user,
+                    message: data.message
+                }
+                messagesManager.createMessage(message);
+        }
     })
 })
