@@ -7,8 +7,26 @@ export default class Products {
         return result;
     };
 
-    getProducts = async () => {
-        let products = await productsModel.find().lean();
+    getProducts = async (limit, page, query, sort) => {
+        let error = false;
+        if ('available' in query) {
+            if(query.available === 'true'){
+                query = {stock: {$gt: 0}};
+            } else if(query.available === 'false'){
+                query = {stock: 0};
+            }
+        };
+        let products = await productsModel.paginate(query, { limit: limit, page: page, sort: sort, lean: true }, (err, result) => {
+            if (err) {
+                error = true;
+                return err;
+            } else {
+                return result;
+            }
+        });
+        if (error) {
+            return { error: products.message  };
+            }
         return products;
     }
 
@@ -17,32 +35,31 @@ export default class Products {
         if (id.match(/^[0-9a-fA-F]{24}$/)) {
             let product = await productsModel.findById(id).lean();
             return product;
-        }else{
+        } else {
             return product;
         }
     }
 
-    updateProduct = async(id, producto) => {
+    updateProduct = async (id, producto) => {
         let result = undefined;
-        let exists = await productsModel.exists({_id: id})
+        let exists = await productsModel.exists({ _id: id })
         if (id.match(/^[0-9a-fA-F]{24}$/) && exists !== null) {
-                result = productsModel.findByIdAndUpdate(id, {$set: producto}).lean();
-                return result;
-        }else{
+            result = productsModel.findByIdAndUpdate(id, { $set: producto }).lean();
+            return result;
+        } else {
             return result;
         }
     }
 
-    deleteProduct = async(id) => {
+    deleteProduct = async (id) => {
         let result = undefined;
-        let exists = await productsModel.exists({_id: id})
-        console.log(id.match(/^[0-9a-fA-F]{24}$/) && exists !== null);
+        let exists = await productsModel.exists({ _id: id })
         if (id.match(/^[0-9a-fA-F]{24}$/) && exists !== null) {
-                result = await productsModel.deleteOne({_id: id});
-                return result;
-        }else{
+            result = await productsModel.deleteOne({ _id: id });
+            return result;
+        } else {
             return result;
         }
     }
-    
+
 }
