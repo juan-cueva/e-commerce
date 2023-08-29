@@ -11,20 +11,6 @@ const cartManager = new CartManager();
 
 const router = Router();
 
-// router.get('/', async (req, res) => {
-//     const products = await productManager.getProducts();
-//     res.render('home', {products} );
-// });
-
-// router.get('/realtimeproducts', async (req, res) => {
-//     const products = await productManager.getProducts();
-//     res.render('realTimeProducts', {products} );
-// });
-
-// router.get('/chat', async (req, res) => {
-//     res.render('chat');
-// });
-
 router.get('/products', async (req, res) => {
     let limit = req.query.limit;
     let page = req.query.page;
@@ -100,13 +86,28 @@ router.get('/products', async (req, res) => {
             nextLink: productos.hasNextPage ? nextLink += (link.includes('?') ? `&page=${productos.nextPage}` : `?page=${productos.nextPage}`) : null,
         }
     }
-    res.render('products', {response});
+    res.render('products', {response, user: req.session.user});
 });
 
 router.get('/carts/:cid', async (req, res) => {
     let cid = req.params.cid;
     const products = await cartManager.getProductsInCart(cid);
     res.render('carts', {products});
+});
+
+router.get('/', async (req, res) => {
+    res.render('login');
+});
+
+router.get('/register', async (req, res) => {
+    res.render('register');
+});
+
+router.get('/profile', async (req, res) => {
+    res.render('profile',
+    {
+        user: req.session.user
+    });
 });
 
 export default router;

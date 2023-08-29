@@ -1,4 +1,10 @@
 <h1>Products</h1>
+<div class="d-flex justify-content-end">
+    <button class="btn btn-danger" id="logout">Logout</button>
+</div>
+<h2>Bienvenido! {{user.name}}</h2>
+<h3>Email: {{user.email}}</h3>
+<h3>Rol: {{user.role}}</h3>
 <div class="card-group ms-3 me-3 mb-3">
     {{#each response.payload.products}}
     <div class="card" style="width: 18rem;">
@@ -40,3 +46,4 @@
     </li>
     {{/if}}
 </div>
+<script src="./js/products.js"></script>
