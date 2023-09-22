@@ -1,22 +1,60 @@
 import { Router } from 'express';
 import usersModel from '../dao/models/users.js';
+import { createHash, isValidPassword } from '../utils.js';
 
 const router = Router();
 
 router.post('/register', async (req, res) => {
-    const user = req.body;
+    const { first_name, last_name, email, age, password } = req.body;
+    if(!first_name || !last_name || !email || !age || !password) {
+        return res.status(400).send(
+            {
+                status: 'error',
+                payload: 'Missing fields'
+            }
+        );
+    }
+    let user = {
+        first_name,
+        last_name,
+        email,
+        age,
+        password: createHash(password)
+    }
     const result = await usersModel.create(user);
-    res.send(
-        {
-            status: 'success',
-            payload: result
-        }
-    );
+    if (result) {
+        res.status(200).send(
+            {
+                status: 'success',
+                payload: user
+            }
+        );
+    } else {
+        res.status(400).send(
+            {
+                status: 'error',
+                payload: 'User not created'
+            }
+        );
+    }
 });
 
 router.post('/login', async (req, res) => {
-    const user = req.body;
-    const result = await usersModel.findOne({ email: user.email, password: user.password });
+    const { email, password } = req.body;
+    if(!email || !password) {
+        return res.status(400).send(
+            {
+                status: 'error',
+                payload: 'Missing fields'
+            }
+        );
+    }
+    let user = {
+        email,
+        password
+    }
+    
+    const result = await usersModel.findOne({ email: user.email});
     if (!result) {
         if (user.email === "adminCoder@coder.com" && user.password === "adminCod3r123") {
             req.session.user = {
@@ -40,6 +78,15 @@ router.post('/login', async (req, res) => {
             );
         }
     } else {
+        console.log(user.password, result.password)
+        if(!isValidPassword(result.password, user.password)) {
+            return res.status(400).send(
+                {
+                    status: 'error',
+                    payload: 'Invalid username or password'
+                }
+            );
+        }
         let userInfo = {
             name: result.first_name + ' ' + result.last_name,
             email: result.email,
@@ -49,7 +96,7 @@ router.post('/login', async (req, res) => {
         res.status(200).send(
             {
                 status: 'success',
-                payload: 'Login successful'
+                payload: userInfo
             }
         );
     }
