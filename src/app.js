@@ -11,6 +11,9 @@ import views from './routes/views.router.js';
 import sessionRouter from './routes/session.router.js';
 import MessagesManager from './dao/dbManagers/messages.js';
 
+import passport from 'passport';
+import initializePassport from './config/passport.config.js';
+import initializePassportGH from './config/passportGH.config.js';
 
 import __dirname from './utils.js';
 import { Server } from 'socket.io'
@@ -28,6 +31,10 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
+initializePassport();
+initializePassportGH();
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

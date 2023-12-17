@@ -1,106 +1,38 @@
 import { Router } from 'express';
 import usersModel from '../dao/models/users.js';
 import { createHash, isValidPassword } from '../utils.js';
+import passport from 'passport';
 
 const router = Router();
 
-router.post('/register', async (req, res) => {
-    const { first_name, last_name, email, age, password } = req.body;
-    if(!first_name || !last_name || !email || !age || !password) {
-        return res.status(400).send(
-            {
-                status: 'error',
-                payload: 'Missing fields'
-            }
-        );
-    }
-    let user = {
-        first_name,
-        last_name,
-        email,
-        age,
-        password: createHash(password)
-    }
-    const result = await usersModel.create(user);
-    if (result) {
-        res.status(200).send(
-            {
-                status: 'success',
-                payload: user
-            }
-        );
-    } else {
-        res.status(400).send(
-            {
-                status: 'error',
-                payload: 'User not created'
-            }
-        );
-    }
+router.post('/register', passport.authenticate('register', { failureRedirect: '/api/sessions/failregister' }), async (req, res) => {
+    res.send({ status: "success", message: "User registered" });
 });
 
-router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
-    if(!email || !password) {
-        return res.status(400).send(
-            {
-                status: 'error',
-                payload: 'Missing fields'
-            }
-        );
-    }
-    let user = {
-        email,
-        password
-    }
-    
-    const result = await usersModel.findOne({ email: user.email});
-    if (!result) {
-        if (user.email === "adminCoder@coder.com" && user.password === "adminCod3r123") {
-            req.session.user = {
-                name: "Admin Coder",
-                email: "adminCoder@coder.com",
-                role: "admin"
-            }
-            res.status(200).send(
-                {
-                    status: 'success',
-                    payload: 'Login successful'
-                }
-            );  
-        }
-        else {
-            res.status(400).send(
-                {
-                    status: 'error',
-                    payload: 'Invalid username or password'
-                }
-            );
+router.post('/login', passport.authenticate('login', { failureRedirect: '/api/sessions/faillogin' }), async (req, res) => {
+    if (!req.user) return res.status(400).send({ status: "error", error: "Invalid credentials" });
+    console.log(req.user);
+    if (req.user.email === "adminCoder@coder.com") {
+        req.session.user = {
+            name: "Admin Coder",
+            email: "adminCoder@coder.com",
+            role: "admin"
         }
     } else {
-        console.log(user.password, result.password)
-        if(!isValidPassword(result.password, user.password)) {
-            return res.status(400).send(
-                {
-                    status: 'error',
-                    payload: 'Invalid username or password'
-                }
-            );
-        }
-        let userInfo = {
-            name: result.first_name + ' ' + result.last_name,
-            email: result.email,
+        console.log("Problema aqui");
+        req.session.user = {
+            name: req.user.first_name + ' ' + req.user.last_name,
+            email: req.user.email,
             role: "usuario"
-        };
-        req.session.user = userInfo;
-        res.status(200).send(
-            {
-                status: 'success',
-                payload: userInfo
-            }
-        );
+        }
     }
-});
+    res.status(200).send(
+        {
+            status: 'success',
+            payload: req.user
+        }
+    )
+})
 
 router.post('/logout', async (req, res) => {
     req.session.destroy();
@@ -111,5 +43,29 @@ router.post('/logout', async (req, res) => {
         });
 
 });
+
+router.get('/failregister', async (req, res) => {
+    res.send({ error: "Registration failed" })
+});
+
+router.get('/faillogin', async (req, res) => {
+    res.send({ error: "Login failed" })
+});
+
+router.get(
+    "/github",
+    passport.authenticate("github", { scope: ["user:email"] }),
+    async (req, res) => { }
+);
+
+router.get("/githubcallback", passport.authenticate("github", { failureRedirect: '/' }), (req, res) => {
+    req.session.user = {
+        name: req.user.first_name + ' ' + req.user.last_name,
+        email: req.user.email,
+        role: "usuario"
+    };
+    res.redirect("/products");
+});
+
 
 export default router;
