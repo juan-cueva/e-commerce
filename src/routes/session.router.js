@@ -19,11 +19,10 @@ router.post('/login', passport.authenticate('login', { failureRedirect: '/api/se
             role: "admin"
         }
     } else {
-        console.log("Problema aqui");
         req.session.user = {
             name: req.user.first_name + ' ' + req.user.last_name,
             email: req.user.email,
-            role: "usuario"
+            role: req.user.role
         }
     }
     res.status(200).send(
@@ -66,6 +65,10 @@ router.get("/githubcallback", passport.authenticate("github", { failureRedirect:
     };
     res.redirect("/products");
 });
+
+router.get("/current", async(req,res) => {
+    res.send(req.session.user);
+})
 
 
 export default router;

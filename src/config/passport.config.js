@@ -1,7 +1,10 @@
 import passport from "passport";
 import local from "passport-local";
 import usersModel from "../dao/models/users.js";
+import CartManager from '../dao/dbManagers/carts.js';
 import { createHash, isValidPassword } from "../utils.js";
+
+const cartManager = new CartManager();
 
 const LocalStrategy = local.Strategy;
 const initializePassport = () => {
@@ -11,6 +14,7 @@ const initializePassport = () => {
         const { first_name, last_name, age } = req.body;
         try {
             let user = await usersModel.findOne({ email: email });
+            let newCart = await cartManager.createCart();
             if (user) {
                 return done(null, false, { message: 'User already exists' });
             }
@@ -19,7 +23,8 @@ const initializePassport = () => {
                 last_name,
                 email,
                 age,
-                password: createHash(password)
+                password: createHash(password),
+                cart: newCart._id
             }
             let result = await usersModel.create(newUser)
             return done(null, result)
@@ -55,7 +60,6 @@ const initializePassport = () => {
     ))
 
     passport.serializeUser((user, done) => {
-        console.log(user);
         done(null, user._id)
     })
 
