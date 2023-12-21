@@ -1,10 +1,10 @@
 import passport from "passport";
 import local from "passport-local";
-import usersModel from "../dao/models/users.js";
-import CartManager from '../dao/dbManagers/carts.js';
+import usersModel from "../dao/models/users.model.js";
+import {CartsDAO} from '../dao/dbManagers/carts.manager.js';
 import { createHash, isValidPassword } from "../utils.js";
 
-const cartManager = new CartManager();
+const cartsDAO = new CartsDAO();
 
 const LocalStrategy = local.Strategy;
 const initializePassport = () => {
@@ -14,7 +14,7 @@ const initializePassport = () => {
         const { first_name, last_name, age } = req.body;
         try {
             let user = await usersModel.findOne({ email: email });
-            let newCart = await cartManager.createCart();
+            let newCart = await cartsDAO.create();
             if (user) {
                 return done(null, false, { message: 'User already exists' });
             }
@@ -44,12 +44,16 @@ const initializePassport = () => {
                     email: "adminCoder@coder.com",
                     role: "admin"
                 }
+                if(!user) {
+                    done(null, false)
+                }
                 if (!user && email == ! "adminCoder@coder.com" && password == ! "adminCod3r123") {
                     done(null, false)
                 }
                 if (email === "adminCoder@coder.com", password === "adminCod3r123") {
                     return done(null, adminUser)
                 }
+                console.log(user);
                 if (!isValidPassword(user.password, password)) return done(null, false)
                 done(null, user)
             } catch (err) {

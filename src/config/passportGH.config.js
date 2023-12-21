@@ -1,6 +1,8 @@
 import passport from "passport";
 import GitHubStrategy from "passport-github2"
-import usersModel from "../dao/models/users.js";
+import { UsersDAO } from "../dao/dbManagers/users.manager.js";
+
+const usersDAO = new UsersDAO();
 
 const initializePassportGH = () => {
     passport.use(
@@ -21,7 +23,7 @@ const initializePassportGH = () => {
                             email: profile._json.email,
                             password: ""
                         };
-                        let result = await usersModel.create(newUser);
+                        let result = await usersDAO.create(newUser);
                         done(null, result);
                     } else {
                         done(null, user);
