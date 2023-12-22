@@ -2,8 +2,9 @@ import express from 'express';
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
 import MongoStore from 'connect-mongo';
-import handlebars from 'express-handlebars'
+import handlebars from 'express-handlebars';
 import mongoose from 'mongoose';
+import Handlebars from 'handlebars';
 
 import products from './routes/products.router.js';
 import carts from './routes/carts.router.js';
@@ -23,6 +24,10 @@ import { Server } from 'socket.io'
 const PORT = config.port;
 const mongoUrl = config.mongoUrl;
 const sessionKey = config.sessionKey
+
+Handlebars.registerHelper('json', function(context) {
+    return JSON.stringify(context);
+});
 
 const app = express();
 const connection = mongoose.connect(mongoUrl)

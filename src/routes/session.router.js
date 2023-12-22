@@ -20,14 +20,13 @@ router.post('/login', passport.authenticate('login', { failureRedirect: '/api/se
             name: "Admin Coder",
             email: "adminCoder@coder.com",
             role: "admin"
-
-            
         }
     } else {
         req.session.user = {
             name: req.user.first_name + ' ' + req.user.last_name,
             email: req.user.email,
-            role: req.user.role
+            role: req.user.role,
+            cart: req.user.cart._id.toString()
         }
 
     }
