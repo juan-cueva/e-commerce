@@ -25,8 +25,8 @@ export class TicketController {
 
     getTicket = async (req, res) => {
         try {
-            const { id } = req.params;
-            const ticket = await ticketsService.getId(id)
+            const { tid } = req.params;
+            const ticket = await ticketsService.getId(tid)
             res.status(200).send({
                 status: 'success',
                 message: 'Se obtuvo el ticket',
@@ -43,12 +43,12 @@ export class TicketController {
 
     createTicket = async (req, res) => {
         try {
-            const {code, purchase_datetime, amount, purchaser} = req.body;
-            if(!code || !purchase_datetime || !amount || !purchaser) return res.status(400).send({
+            const {  amount, purchaser} = req.body;
+            if(  !amount || !purchaser) return res.status(400).send({
                 status: 'error',
                 message: 'Faltan datos'
             });
-            const ticket = { code, purchase_datetime, amount, purchaser };
+            const ticket = { amount, purchaser };
             const result = await ticketsService.create(ticket);
             res.status(201).send({
                 status: 'success',

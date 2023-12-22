@@ -1,6 +1,5 @@
 import ticketsModel from "../models/tickets.model.js";
 import { logger } from "../../utils/logger.js";
-import { log } from "winston";
 
 export class TicketsDAO {
     constructor() {

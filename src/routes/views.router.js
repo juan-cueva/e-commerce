@@ -1,15 +1,14 @@
 import { Router } from "express";
-import { ProductsService} from '../service/products.service.js';
+import { ProductsService } from '../service/products.service.js';
 import { CartsService } from "../service/carts.service.js";
-// import CartManager from '../dao/dbManagers/carts.js';
+import { TicketsService } from "../service/tickets.service.js";
 
 
 const URL = 'http://localhost:8080/products'
 
 const productsService = new ProductsService();
 const cartsService = new CartsService();
-// const cartManager = new CartManager();
-
+const ticketsService = new TicketsService();
 
 const router = Router();
 
@@ -88,7 +87,7 @@ router.get('/products', async (req, res) => {
             nextLink: productos.hasNextPage ? nextLink += (link.includes('?') ? `&page=${productos.nextPage}` : `?page=${productos.nextPage}`) : null,
         }
     }
-    res.render('products', {response, user: req.session.user});
+    res.render('products', { response, user: req.session.user });
 });
 
 router.get('/carts/:cid', async (req, res) => {
@@ -98,7 +97,7 @@ router.get('/carts/:cid', async (req, res) => {
     let total = products.reduce((accumulator, currentProduct) => {
         return accumulator + currentProduct.quantity * currentProduct.product.price;
     }, 0);
-    res.render('carts', {products, cid, total});
+    res.render('carts', { products, cid, total });
 });
 
 router.get('/', async (req, res) => {
@@ -109,11 +108,21 @@ router.get('/register', async (req, res) => {
     res.render('register');
 });
 
+router.post('/tickets', async (req, res) => {
+    let {total} = req.body;
+    let ticket = {
+        total,
+        user: req.session.user.email
+    }
+    let resul = ticketsService.create(ticket);
+    res.render('tickets', { resul });
+});
+
 router.get('/profile', async (req, res) => {
     res.render('profile',
-    {
-        user: req.session.user
-    });
+        {
+            user: req.session.user
+        });
 });
 
 export default router;
