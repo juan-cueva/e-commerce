@@ -29,6 +29,10 @@ Handlebars.registerHelper('json', function(context) {
     return JSON.stringify(context);
 });
 
+Handlebars.registerHelper('multiply', function(v1,v2) {
+    return v1* v2;
+});
+
 const app = express();
 const connection = mongoose.connect(mongoUrl)
 

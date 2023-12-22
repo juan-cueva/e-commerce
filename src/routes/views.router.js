@@ -95,7 +95,10 @@ router.get('/carts/:cid', async (req, res) => {
     let cid = req.params.cid;
     const cart = await cartsService.getId(cid);
     const products = cart.products;
-    res.render('carts', {products, cid});
+    let total = products.reduce((accumulator, currentProduct) => {
+        return accumulator + currentProduct.quantity * currentProduct.product.price;
+    }, 0);
+    res.render('carts', {products, cid, total});
 });
 
 router.get('/', async (req, res) => {
